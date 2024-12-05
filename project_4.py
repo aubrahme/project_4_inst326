@@ -31,7 +31,7 @@ class Book:
     def loan_method(self):
         pass
 
-
+#FINISH ADDING BOOKS
 shelf= [Book("jane eyre"),
 Book("of mice and men"), 
 Book("dictionary"), Book("harry potter"), Book("percy jackson"),
@@ -40,7 +40,7 @@ Book( "alex rider"), Book("pride and prejudice")
 
 class User:
 
-    def __init__(self, name, dob, username, password):
+    def __init__(self, name, username,dob, password):
         self.name =  name
         self.username = username
         #private attributes
@@ -49,7 +49,8 @@ class User:
 
     def register_user(self):
         #add user to list
-        library_members.append(User(self.name,self.username))
+        library_members.append(User(self.name,self.username,self.__password, self.__dob))
+        return f"The user {self.name} has been registered. Your username is {self.username} and your password is {self.__password}"
 
     def borrow(self):
         pass
@@ -57,7 +58,7 @@ class User:
     def return_book(self):
         pass
     
-library_members= [
+library_members= [User("Sara", "sara123", "1/2/09","abc2324")
 
 
 ]
@@ -69,6 +70,8 @@ class Student(User):
         self.status = "Student"
         self.checked_out = 0
     def borrow(self, book_title): #1 book at a time
+
+        #need to set borrowing limit to 30 days 
         #max 3 books at a time
 
         #check status
@@ -80,8 +83,10 @@ class Student(User):
                     book.set_status("checked out")
 
 
-    def return_book(self):
-        pass
+    def return_book(self, book_title):
+        for book in shelf:
+            if book.title == book_title:
+                    book.set_status("available")
         #change status to available 
 
 class Professor(User):
@@ -99,16 +104,21 @@ class Professor(User):
                     #now change status of the book to checked
                     book.set_status("checked out")
         #then you need to have the name of the user and the book they checked out
-    def return_book(self):
-        pass
+    def return_book(self, book_title):
+        for book in shelf:
+            if book.title == book_title:
+                    book.set_status("available")
 
-class Library(Book): 
+class Library(Book):
+    def __init__(self, title):
+        super().__init__(title) 
+        self.status = "available"
     #adding and removing books 
     def add_book(self, book_name):
-        shelf.append(book_name)
+        shelf.append(Book(book_name, "available"))
 
     def remove_book(self,book_name):
-        shelf.remove(book_name)
+        shelf.remove(Book(book_name))
 
 
 
