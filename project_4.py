@@ -4,7 +4,7 @@ Library Management System
 Objective: Develop a system to manage a librarys 
 collection of books, users, and loan records. 
 This system should allow users to borrow and return books,
- as well as track which books are currently available.
+as well as track which books are currently available.
 
 Requirements
 
@@ -18,13 +18,28 @@ Include execution code to demonstrate that your solution works
 """
 class Book:
     #need a list of books. then if they borrow u take it out of the list and return u put it back
-    books = ["jane eyre", "of mice and men", "dictionary", "harry potter", "percy jackson",
-              "alex rider", "pride and prejudice"] 
+    #status = ["hold", "checked out", "available"]
     def __init__(self,title):
         self.title = title
-    #book loans method
+        self.status = "available"
+    def get_status(self):
+        return self.status
+    def set_status(self,s):
+        self.status = s
+        return self.status
+
+    def loan_method(self):
+        pass
+
+
+shelf= [Book("jane eyre"),
+Book("of mice and men"), 
+Book("dictionary"), Book("harry potter"), Book("percy jackson"),
+Book( "alex rider"), Book("pride and prejudice")
+]
 
 class User:
+
     def __init__(self, name, dob, username, password):
         self.name =  name
         self.username = username
@@ -33,35 +48,68 @@ class User:
         self.__dob = dob
 
     def register_user(self):
-        pass
+        #add user to list
+        library_members.append(User(self.name,self.username))
 
     def borrow(self):
         pass
-    #method to register a user 
+    
     def return_book(self):
         pass
     
+library_members= [
+
+
+]
 
 class Student(User):
+    max_number = 3
     def __init__(self, name, dob, username, password):
         super().__init__(name, dob, username, password)
-        self.status = "student"
-    def borrow(self,num_books):
+        self.status = "Student"
+        self.checked_out = 0
+    def borrow(self, book_title): #1 book at a time
         #max 3 books at a time
-        pass
+
+        #check status
+        for book in shelf:
+            if book.title == book_title:
+                if book.get_status == "available" and self.checked_out < 3:
+                    self.checked_out += 1 
+                    #now change status of the book to checked
+                    book.set_status("checked out")
+
+
     def return_book(self):
         pass
+        #change status to available 
 
 class Professor(User):
+    max_number = 10
     def __init__(self, name, dob, username, password):
         super().__init__(name, dob, username, password)
-        self.status = "professor"
-    def borrow(self, num_books):
+        self.status = "Professor"
+        self.checked_out = 0
+    def borrow(self, book_title):
         #max 10 books at a time
-        pass
+        for book in shelf:
+            if book.title == book_title:
+                if book.get_status == "available" and self.checked_out < 10:
+                    self.checked_out += 1 
+                    #now change status of the book to checked
+                    book.set_status("checked out")
+        #then you need to have the name of the user and the book they checked out
     def return_book(self):
         pass
 
 class Library(Book): 
-    pass
-#methods to add books
+    #adding and removing books 
+    def add_book(self, book_name):
+        shelf.append(book_name)
+
+    def remove_book(self,book_name):
+        shelf.remove(book_name)
+
+
+
+
