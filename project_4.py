@@ -16,6 +16,8 @@ Include methods for adding/removing books, registering users, and managing book 
 Include execution code to demonstrate that your solution works
 
 """
+
+#date return
 class Book:
     #need a list of books. then if they borrow u take it out of the list and return u put it back
     #status = ["hold", "checked out", "available"]
@@ -28,10 +30,7 @@ class Book:
         self.status = s
         return self.status
 
-    def loan_method(self):
-        pass
 
-#FINISH ADDING BOOKS
 shelf= [Book("jane eyre"),
 Book("of mice and men"), 
 Book("dictionary"), Book("harry potter"), Book("percy jackson"),
@@ -43,13 +42,14 @@ class User:
     def __init__(self, name, username,dob, password):
         self.name =  name
         self.username = username
+        self.status = "not set" #default 
         #private attributes
         self.__password = password
         self.__dob = dob
 
-    def register_user(self):
+    def register_user(self,u):
         #add user to list
-        library_members.append(User(self.name,self.username,self.__password, self.__dob))
+        library_members.append(u)
         return f"The user {self.name} has been registered. Your username is {self.username} and your password is {self.__password}"
 
     def borrow(self):
@@ -75,18 +75,28 @@ class Student(User):
         #max 3 books at a time
 
         #check status
-        for book in shelf:
+        for i in range(len(shelf)):
+            if shelf[i].title == book_title:
+               
+
+                if shelf[i].get_status() == "available" and self.checked_out < 3:
+                    
+                    self.checked_out += 1 
+
+                    shelf[i].set_status("checked out")
+        """ for book in shelf:
             if book.title == book_title:
                 if book.get_status == "available" and self.checked_out < 3:
                     self.checked_out += 1 
                     #now change status of the book to checked
-                    book.set_status("checked out")
+                    book.set_status("checked out")"""
 
 
     def return_book(self, book_title):
-        for book in shelf:
-            if book.title == book_title:
-                    book.set_status("available")
+        for i in range(len(shelf)):
+            if shelf[i].title == book_title:
+                    shelf[i].set_status("available")
+                    self.checked_out -= 1
         #change status to available 
 
 class Professor(User):
@@ -97,29 +107,69 @@ class Professor(User):
         self.checked_out = 0
     def borrow(self, book_title):
         #max 10 books at a time
-        for book in shelf:
+        for i in range(len(shelf)):
+            if shelf[i].title == book_title:
+                if shelf[i].get_status() == "available" and self.checked_out < 3:
+                    self.checked_out += 1 
+
+                    shelf[i].set_status("checked out")
+        """for book in shelf:
             if book.title == book_title:
                 if book.get_status == "available" and self.checked_out < 10:
                     self.checked_out += 1 
                     #now change status of the book to checked
-                    book.set_status("checked out")
+                    book.set_status("checked out")"""
         #then you need to have the name of the user and the book they checked out
     def return_book(self, book_title):
-        for book in shelf:
-            if book.title == book_title:
-                    book.set_status("available")
+        for i in range(len(shelf)):
+            if shelf[i].title == book_title:
+                    shelf[i].set_status("available")
+                    self.checked_out -= 1
 
-class Library(Book):
-    def __init__(self, title):
-        super().__init__(title) 
-        self.status = "available"
+class Library():
     #adding and removing books 
     def add_book(self, book_name):
-        shelf.append(Book(book_name, "available"))
+        shelf.append(Book(book_name))
 
     def remove_book(self,book_name):
-        shelf.remove(Book(book_name))
+        for index,book in enumerate(shelf):
+            if book.title == book_name:
+               
+                del shelf[index]
 
 
 
+#run
 
+#add books, remove
+
+
+users = [Student("Amy", "amy1394", "11/20/05","fhs2324"), Professor("Ben", "ben1875", "1/2/79","sjf12974"), Student("Sloane", "sloane2784", "10/2/10","sjhf2873"), Professor("Susan", "susie287", "8/22/89","shd173")]
+
+for user in users:
+    user.register_user(user)
+
+
+for lb in library_members:
+    print(lb.name)
+
+#borrowing and returning 
+
+
+student = Student("Amy", "amy1394", "11/20/05","fhs2324")
+student.borrow("harry potter") 
+prof = Professor("Ben", "ben1875", "1/2/79","sjf12974")
+prof.borrow("dictionary")
+for book in shelf:
+    print(book.get_status())
+prof.return_book("dictionary")
+
+for book in shelf:
+    print(book.get_status())
+
+lib = Library()
+lib.add_book("a thousand splendid suns")
+lib.remove_book("jane eyre")
+
+for book in shelf:
+    print(book.title)
